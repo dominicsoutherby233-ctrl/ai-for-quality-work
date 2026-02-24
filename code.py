@@ -1,14 +1,35 @@
-def most(L):
-    if L == []:
-        return None
-    mx = 0
-    val = L[0]
-    for x in L:
-        c = L.count(x)
-        if c > mx:
-            mx = c
-            val = x
-    return val
+from collections import Counter
+from typing import Iterable, Any, List
+
+
+def most(sequence: Iterable[Any]) -> int:
+    """
+    Return the maximum occurrence count of any element in `sequence`.
+    Returns 0 for None, non-iterable or empty inputs.
+    Uses Counter for hashable items and an equality-based fallback for unhashable ones.
+    """
+    if sequence is None:
+        return 0
+    try:
+        items = list(sequence)
+    except TypeError:
+        return 0
+    if not items:
+        return 0
+    try:
+        counts = Counter(items)
+        return max(counts.values())
+    except TypeError:
+        max_count = 0
+        seen: List[Any] = []
+        for item in items:
+            if any(item == s for s in seen):
+                continue
+            cnt = sum(1 for x in items if x == item)
+            seen.append(item)
+            if cnt > max_count:
+                max_count = cnt
+        return max_count
 
 
 def not_in_b_case_insnstv(a, b):
